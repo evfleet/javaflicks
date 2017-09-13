@@ -9,7 +9,8 @@
         "controllers": "./controllers",
         "helpers": "./helpers",
         "models": "./models",
-        "routes": "./routes"
+        "routes": "./routes",
+        "lib": "./lib"
       }
     }]
   ]
