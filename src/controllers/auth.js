@@ -50,5 +50,43 @@ export default {
           return res.json(createAPIResponse(false, 'Unexpected server error', 500));
       }
     }
+  },
+
+  async requestResetPassword(req, res) {
+    const { email } = req.body;
+
+    try {
+      const user = await User.findOne({ email });
+
+      if (user) {
+        user.requestResetPassword();
+      }
+
+      return res.json(createAPIResponse(true, { success: true }));
+    } catch (error) {
+      return res.json(createAPIResponse(false, 'Unexpected server error', 500));
+    }
+  },
+
+  async resetPassword(req, res) {
+    const { email, password, token } = req.body;
+
+    try {
+      const user = await User.findOne({ email });
+      const updated = await (user ? user.resetPassword(password, token) : false);
+
+      if (!updated) {
+        throw new Error('Invalid email/token combination');
+      }
+
+      return res.json(createAPIResponse(true, { success: true }));
+    } catch (error) {
+      switch (error.message) {
+        case 'Invalid email/token combination':
+          return res.json(createAPIResponse(false, error.message, 401));
+        default:
+          return res.json(createAPIResponse(false, 'Unexpected server error', 500));
+      }
+    }
   }
 };
