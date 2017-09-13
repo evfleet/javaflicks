@@ -23,6 +23,20 @@ const UserSchema = new Schema({
     type: String,
     trim: true,
     required: 'A password is required'
+  },
+  verified: {
+    type: Boolean,
+    default: false
+  },
+  verificationToken: {
+    type: String,
+    default: crypto.randomBytes(32).toString('hex')
+  },
+  resetExpires: {
+    type: Date
+  },
+  resetToken: {
+    type: String
   }
 });
 
