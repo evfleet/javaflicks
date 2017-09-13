@@ -1,5 +1,6 @@
 const devConfig = {
-  DATABASE_URL: ''
+  DATABASE_URL: '',
+  SESSION_SECRET: ''
 };
 
 const testConfig = {
