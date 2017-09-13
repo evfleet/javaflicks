@@ -1,36 +1,31 @@
 const devConfig = {
-  DATABASE: {
-    user: '',
-    pass: '',
-    host: '',
-    table: ''
-  }
-}
+  DATABASE_URL: ''
+};
 
 const testConfig = {
 
-}
+};
 
 const prodConfig = {
 
-}
+};
 
 const defaultConfig = {
-  PORT: 3000
-}
+  PORT: process.env.PORT || 3000
+};
 
-function setConfig () {
+function setConfig() {
   switch (process.env.NODE_ENV) {
     case 'development':
-      return devConfig
+      return devConfig;
     case 'test':
-      return testConfig
+      return testConfig;
     default:
-      return prodConfig
+      return prodConfig;
   }
 }
 
-export {
+export default {
   ...defaultConfig,
   ...setConfig()
-}
+};

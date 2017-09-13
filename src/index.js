@@ -1,8 +1,17 @@
-import express from 'express'
-import constants from './config/constants'
+import express from 'express';
 
-const app = express()
+import initMiddleware from './config/middleware';
+import constants from './config/constants';
+import './config/database';
 
-app.listen(3000, () => {
-  console.log(`Server running on port: ${3000}`)
-})
+const app = express();
+
+initMiddleware(app);
+
+app.get('/', (req, res) => {
+  res.json({});
+});
+
+app.listen(constants.PORT, () => {
+  console.log(`Server running on port: ${constants.PORT}`);
+});
