@@ -14,11 +14,13 @@
     "express": "^4.15.4",
     "helmet": "^3.8.1",
     "mongoose": "^4.11.11",
-    "passport": "^0.4.0"
+    "passport": "^0.4.0",
+    "validator": "^8.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.0",
+    "babel-plugin-module-resolver": "^2.7.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "body-parser": "^1.18.1",

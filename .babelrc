@@ -1,4 +1,16 @@
 {
   "presets": ["env"],
-  "plugins": ["transform-object-rest-spread"]
+  "plugins": [
+    "transform-object-rest-spread",
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "config": "./config",
+        "controllers": "./controllers",
+        "helpers": "./helpers",
+        "models": "./models",
+        "routes": "./routes"
+      }
+    }]
+  ]
 }
