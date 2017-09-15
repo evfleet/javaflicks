@@ -3,7 +3,7 @@
   "plugins": [
     "transform-object-rest-spread",
     ["module-resolver", {
-      "root": ["./src"],
+      "root": ["./src/server"],
       "alias": {
         "config": "./config",
         "controllers": "./controllers",

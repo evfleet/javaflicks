@@ -26,6 +26,10 @@ app.use(session({
 
 app.use('/api', routes);
 
+app.get('*', (req, res) => {
+  res.json({});
+});
+
 app.listen(constants.PORT, () => {
   console.log(`Server running on port: ${constants.PORT}`);
 });
