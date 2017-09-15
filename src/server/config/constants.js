@@ -1,6 +1,6 @@
 const devConfig = {
-  DATABASE_URL: 'mongodb://5bhTJg06GBlW6ntjn9Ju3BKgxNRHaGgn:aTkA610Nfdy73Lulkl6DGHDswWuUcjUD@ds135364.mlab.com:35364/auth',
-  SESSION_SECRET: 'qm4FUqO!Z7jmbw!Q&#V3qvvrQbEqJd&G'
+  DATABASE_URL: 'mongodb://qoWLhhUnDYsdOcrq9uc2V0EZI7vbZ6m3:6x*4OvEjUXkqDZBKkxXES!L2e1RfShfv@ds135364.mlab.com:35364/auth',
+  SESSION_SECRET: 'LL!aMWaArx#G%FO3B5mg7SR^f^Ai4dlr'
 };
 
 const testConfig = {
