@@ -1,3 +1,4 @@
+// @flow
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import validator from 'validator';
@@ -48,11 +49,11 @@ UserSchema.pre('save', async function(next) {
 });
 
 UserSchema.methods = {
-  async comparePassword(password) {
+  async comparePassword(password: string): Promise<any> {
     return bcrypt.compare(password, this.password);
   },
 
-  emailVerification(token) {
+  emailVerification(token: string): boolean {
     if (token == this.verificationToken) {
       this.verified = true;
       this.verificationToken = null;
@@ -62,15 +63,15 @@ UserSchema.methods = {
     return false;
   },
 
-  requestResetPassword() {
+  requestResetPassword(): boolean {
     this.resetToken = crypto.randomBytes(32).toString('hex');
     this.resetExpires = new Date(Date.now() + 30 * 60000);
     this.save();
     return true;
   },
 
-  resetPassword(password, token) {
-    if (Date.now() > this.resetExpires || token != this.resetToken) {
+  resetPassword(password: string, token: string): boolean {
+    if (Date.now() > this.resetExpires || token !== this.resetToken) {
       return false;
     } else {
       this.resetToken = null;

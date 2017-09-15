@@ -1,4 +1,14 @@
-export default (success, payload, code) => {
+// @flow
+
+type APIResponse = {
+  data?: any,
+  error?: {
+    code: number,
+    message: string
+  }
+}
+
+export default (success: boolean, payload: any, code: number): APIResponse => {
   if (success) {
     return {
       data: payload
@@ -11,5 +21,4 @@ export default (success, payload, code) => {
       }
     };
   }
-}
-;
+};

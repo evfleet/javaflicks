@@ -1,4 +1,3 @@
-import validator from 'validator';
 import createAPIResponse from 'helpers/createAPIResponse';
 import User from 'models/user';
 import Email from 'lib/Email';
