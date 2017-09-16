@@ -1,6 +1,6 @@
+import CustomStrategy from 'passport-custom';
 import LocalStrategy from 'passport-local';
-
-import User from 'models/user';
+import models from 'config/database';
 
 export default (passport) => {
   passport.serializeUser((user, done) => {
@@ -8,37 +8,41 @@ export default (passport) => {
   });
 
   passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
+    models.User.findById(id, (err, user) => {
       done(err, user);
     });
   });
 
-  passport.use('signup', new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password',
-    passReqToCallback: true
-  }, async (req, email, password, done) => {
+  passport.use('register', new CustomStrategy(async (req, done) => {
     try {
-      const user = await User.create({
-        username: req.body.username,
-        local: {
-          email,
-          password
-        }
-      });
-      return done(null, user);
+      const { username, email, password } = req.body;
+      const user = await models.User.create({ username, email, password });
+      done(null, user);
     } catch (error) {
       done(error);
     }
   }));
 
-  /*
-  passport.use('local', new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password',
-    passReqToCallback: true
-  }, async (req, identifier, password, done) => {
+  passport.use('login', new CustomStrategy(async (req, done) => {
+    try {
+      const { identifier, password } = req.body;
+      const user = await models.User.findOne({
+        where: {
+          $or: [
+            { email: identifier },
+            { username: identifier }
+          ]
+        }
+      });
+      const validPassword = await (user ? user.comparePassword(password) : false);
 
+      if (!validPassword) {
+        throw new Error('Wrong password');
+      }
+
+      done(null, user);
+    } catch (error) {
+      done(error);
+    }
   }));
-  */
 };

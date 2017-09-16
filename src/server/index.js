@@ -6,8 +6,10 @@ import session from 'express-session';
 
 import database from 'config/database';
 import constants from 'config/constants';
+import initPassport from 'config/passport';
 
 const app = express();
+const SessionStore = require('connect-session-sequelize')(session.Store);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,8 +17,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
   secret: constants.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: new SessionStore({
+    db: database.sequelize
+  })
 }));
+
+initPassport(passport);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -25,34 +32,48 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-/*
-  app.post('/register', (req, res) => {
-    passport.authenticate('signup', (err, user) => {
+app.post('/register', (req, res) => {
+  passport.authenticate('register', (err, user) => {
+    if (err) {
+      return res.json({ error: true });
+    }
+
+    if (!user) {
+      return res.json({
+        user: null
+      });
+    }
+
+    return res.json({
+      user
+    });
+  })(req, res);
+});
+
+app.post('/login', (req, res) => {
+  passport.authenticate('login', (err, user) => {
+    if (err) {
+      return res.json({ error: true });
+    }
+
+    if (!user) {
+      return res.json({
+        user: null
+      });
+    }
+
+    req.login(user, (err) => {
       if (err) {
         return res.json({ error: true });
       }
-
-      if (err) {
-        return next(err); // will generate a 500 error
-      }
-      // Generate a JSON response reflecting authentication status
-      if (! user) {
-        return res.send({ success: false, message: 'authentication failed' });
-      }
-      // ***********************************************************************
-      // "Note that when using a custom callback, it becomes the application's
-      // responsibility to establish a session (by calling req.login()) and send
-      // a response."
-      // Source: http://passportjs.org/docs
-      // ***********************************************************************
-      req.login(user, loginErr => {
-        if (loginErr) {
-          return next(loginErr);
-        }
-        return res.send({ success: true, message: 'authentication succeeded' });
-      });
-    })(req, res);
+      return res.send({ success: true, message: 'authentication succeeded' });
+    });
   });
-  */
+});
 
-app.listen(constants.PORT, () => { console.log(`Server running on port: ${constants.PORT}`); });
+app.listen(constants.PORT, () => {
+  database.sequelize.sync().then(() => {
+    console.log('Sequelize running');
+  });
+  console.log(`Server running on port: ${constants.PORT}`);
+});
