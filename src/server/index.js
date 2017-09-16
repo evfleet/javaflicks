@@ -1,22 +1,31 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import morgan from 'morgan';
 import passport from 'passport';
+import bodyParser from 'body-parser';
+import session from 'express-session';
 
-import init from './init';
+import database from 'config/database';
 import constants from 'config/constants';
-import initPassport from 'config/passport';
-import initMiddleware from 'config/middleware';
 
 const app = express();
 
-init.then(({ ROOT_URL }) => {
-  mongoose.Promise = global.Promise;
-  mongoose.connect(constants.DATABASE_URL, { useMongoClient: true });
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-  initPassport(passport);
-  initMiddleware(app);
+app.use(session({
+  secret: constants.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
 
-  /*
+app.use(passport.initialize());
+app.use(passport.session());
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
+/*
   app.post('/register', (req, res) => {
     passport.authenticate('signup', (err, user) => {
       if (err) {
@@ -46,5 +55,4 @@ init.then(({ ROOT_URL }) => {
   });
   */
 
-  app.listen(constants.PORT, () => { console.log(`Server running on port: ${constants.PORT}`); });
-}).catch((error) => { console.log(error); });
+app.listen(constants.PORT, () => { console.log(`Server running on port: ${constants.PORT}`); });
