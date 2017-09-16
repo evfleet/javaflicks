@@ -1,6 +1,5 @@
 import createAPIResponse from 'helpers/createAPIResponse';
 import User from 'models/user';
-import Email from 'lib/Email';
 
 export default {
   async register(req, res) {
@@ -8,11 +7,11 @@ export default {
 
     try {
       await User.create({ username, email, password });
-      await Email.sendVerification(email);
+
       return res.json(createAPIResponse(true, { success: true }, 200));
     } catch (error) {
       if (error.code && error.code === 11000) {
-        await Email.sendNotification(email);
+
         return res.json(createAPIResponse(true, { success: true }, 200));
       }
       return res.json(createAPIResponse(false, 'Unexpected server error', 500));
