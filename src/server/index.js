@@ -1,7 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
-import { graphqlExpress } from 'graphql-server-express';
+import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 
 import schema from 'schema';
 import models from 'config/database';
@@ -19,6 +19,10 @@ app.use(session({
   store: new SessionStore({
     db: models.sequelize
   })
+}));
+
+app.use('/graphiql', graphiqlExpress({
+  endpointURL: '/graphql'
 }));
 
 app.use('/graphql', graphqlExpress((req) => ({
