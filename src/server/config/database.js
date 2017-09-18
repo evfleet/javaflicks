@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+
 import constants from './constants';
 
 const sequelize = new Sequelize(constants.DATABASE_URL);

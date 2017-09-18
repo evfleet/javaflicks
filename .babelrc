@@ -8,11 +8,10 @@
           "root": ["./src/server"],
           "alias": {
             "config": "./config",
-            "controllers": "./controllers",
             "helpers": "./helpers",
             "models": "./models",
-            "routes": "./routes",
-            "lib": "./lib"
+            "schema": "./schema",
+            "services": "./services"
           }
         }]
       ]

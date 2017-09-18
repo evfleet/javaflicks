@@ -1,16 +1,20 @@
 import CustomStrategy from 'passport-custom';
-import LocalStrategy from 'passport-local';
+
 import models from 'config/database';
+import constants from 'config/constants';
 
 export default (passport) => {
   passport.serializeUser((user, done) => {
     done(null, user.id);
   });
 
-  passport.deserializeUser((id, done) => {
-    models.User.findById(id, (err, user) => {
-      done(err, user);
-    });
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await models.User.findById(id);
+      done(null, user);
+    } catch (error) {
+      done(error);
+    }
   });
 
   passport.use('register', new CustomStrategy(async (req, done) => {
