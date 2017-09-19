@@ -1,25 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-import Auth from 'services/auth';
 import constants from 'config/constants';
-
-function createAuthResponse(res, user) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const [ accessToken, refreshToken ] = await Auth.createTokens(user);
-
-      res.cookie('refreshToken', refreshToken, { signed: true });
-
-      resolve({
-        ...JSON.parse(JSON.stringify(user)),
-        accessToken,
-        refreshToken
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
+import authService from 'services/auth';
+import emailService from 'services/email';
 
 export default {
   Query: {
@@ -54,7 +37,7 @@ export default {
         if (new Date().getTime() / 1000 > decoded.exp) {
           throw new Error('Expired token');
         } else {
-          return Auth.createAuthResponse(res, user);
+          return authService.createAuthResponse(res, user);
         }
       } catch (error) {
         switch (error.message) {
@@ -86,7 +69,7 @@ export default {
         if (!user.verified) {
           throw new Error('Email has not been verified');
         } else {
-          return Auth.createAuthResponse(res, user);
+          return authService.createAuthResponse(res, user);
         }
       } catch (error) {
         switch (error.message) {
@@ -101,9 +84,23 @@ export default {
     },
 
     register: async (parent, { email, username, password }, { models }) => {
-      // needs to handle duplicates
-      // send email confirmation/notification
-      return models.User.create({ username, email, password });
+      try {
+        const { verificationToken } = await models.User.create({ username, email, password });
+        await emailService.sendVerification(email, verificationToken);
+        return { success: true };
+      } catch (error) {
+        if (error.name === 'SequelizeUniqueConstraintError') {
+          switch (error.errors[0].path) {
+            case 'email':
+              await emailService.sendNotification(email);
+              return { success: true };
+            case 'username':
+              throw new Error('Username already taken');
+          }
+        } else {
+          throw new Error('Unexpected server error');
+        }
+      }
     }
   }
 };

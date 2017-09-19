@@ -18,10 +18,13 @@ export default `
     refreshToken: String!
   }
 
+  type RegisterResponse {
+    success: Boolean!
+  }
+
   type Mutation {
     authenticate(email: String!, token: String!): AuthResponse!
     login(identifier: String!, password: String!): AuthResponse!
-    register(email: String!, username: String!, password: String!): User!
-
+    register(email: String!, username: String!, password: String!): RegisterResponse!
   }
 `;
