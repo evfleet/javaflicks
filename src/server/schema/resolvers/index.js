@@ -1,3 +1,5 @@
+import Auth from 'services/auth';
+
 export default {
   Query: {
     getUser: async (parent, { email, username }, { req, models }) => {
@@ -18,24 +20,45 @@ export default {
 
   Mutation: {
     login: async (parent, { identifier, password }, { models }) => {
-      const user = await models.User.findOne({
-        where: {
-          $or: [{ email: identifier }, { username: identifier }]
+      try {
+        const user = await models.User.findOne({
+          where: {
+            $or: [{ email: identifier }, { username: identifier }]
+          }
+        });
+
+        const validPassword = await (user ? user.comparePassword(password) : false);
+
+        if (!validPassword) {
+          throw new Error('Invalid account/password combination');
         }
-      });
 
-      const validPassword = await (user ? user.comparePassword(password) : false);
+        const [ accessToken, refreshToken ] = await Auth.createTokens(user);
 
-      if (!validPassword) {
-        throw new Error('Invalid account/password combination');
+        return {
+          ...JSON.parse(JSON.stringify(user)),
+          accessToken,
+          refreshToken
+        };
+      } catch (error) {
+        switch (error.message) {
+          case 'Invalid account/password combination':
+            throw new Error(error.message);
+          default:
+            throw new Error('Unexpected server error');
+        }
       }
-
-      return user;
     },
 
     register: async (parent, { email, username, password }, { models }) => {
       // needs to handle duplicates
       // send email confirmation/notification
+
+      try {
+
+      } catch (error) {
+
+      }
 
       return models.User.create({ username, email, password });
     }
