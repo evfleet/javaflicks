@@ -59,11 +59,10 @@ export default {
       } catch (error) {
         switch (error.message) {
           case 'jwt malformed':
+          case 'Expired token':
           case 'invalid signature':
           case 'Invalid authentication':
             throw new Error('Invalid authentication');
-          case 'Expired token':
-            throw new Error('Expired token');
           default:
             throw new Error('Unexpected server error');
         }
@@ -82,12 +81,18 @@ export default {
 
         if (!validPassword) {
           throw new Error('Invalid account/password combination');
+        }
+
+        if (!user.verified) {
+          throw new Error('Email has not been verified');
         } else {
           return Auth.createAuthResponse(res, user);
         }
       } catch (error) {
         switch (error.message) {
           case 'Invalid account/password combination':
+            throw new Error(error.message);
+          case 'Email has not been verified':
             throw new Error(error.message);
           default:
             throw new Error('Unexpected server error');
