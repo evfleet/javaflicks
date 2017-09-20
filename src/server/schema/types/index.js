@@ -17,7 +17,7 @@ export default `
   }
 
   type Mutation {
-    authenticate(email: String!, token: String!): AuthResponse!
+    authenticate(email: String!, refreshToken: String!): AuthResponse!
     login(identifier: String!, password: String!): AuthResponse!
     register(email: String!, username: String!, password: String!): RegisterResponse!
   }

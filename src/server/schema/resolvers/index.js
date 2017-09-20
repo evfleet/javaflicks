@@ -23,16 +23,16 @@ export default {
   },
 
   Mutation: {
-    authenticate: async (parent, { email, token }, { req, res, models }) => {
+    authenticate: async (parent, { email, refreshToken }, { req, res, models }) => {
       try {
         const cookieToken = req.signedCookies.refreshToken;
         const user = await models.User.findOne({ where: { email } });
 
-        if (!cookieToken || !user || token !== cookieToken) {
+        if (!cookieToken || !user || refreshToken !== cookieToken) {
           throw new Error('Invalid authentication');
         }
 
-        const decoded = await jwt.verify(token, `${constants.REFRESH_SECRET}${user.password}`);
+        const decoded = await jwt.verify(refreshToken, `${constants.REFRESH_SECRET}${user.password}`);
 
         if (new Date().getTime() / 1000 > decoded.exp) {
           throw new Error('Expired token');

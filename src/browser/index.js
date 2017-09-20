@@ -2,29 +2,41 @@
 
 import React from 'react';
 import { render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo';
 
+import { authReducer } from 'services/auth';
+import Root from 'components/Root';
+
 const networkInterface = createNetworkInterface({
-  uri: '/graphql'
+  uri: '/graphql',
+  opts: {
+    credentials: 'same-origin'
+  }
 });
 
 const client = new ApolloClient({
   networkInterface
 });
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        Hello World
-      </div>
-    );
-  }
-}
+const store = createStore(
+  combineReducers({
+    auth: authReducer,
+    apollo: client.reducer()
+  }),
+  {},
+  compose(
+    applyMiddleware(client.middleware()),
+    (typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined') ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
+  )
+);
 
 render(
-  <ApolloProvider client={ client }>
-    <App />
+  <ApolloProvider store={store} client={client}>
+    <BrowserRouter>
+      <Root />
+    </BrowserRouter>
   </ApolloProvider>
   , document.getElementById('root')
 );
