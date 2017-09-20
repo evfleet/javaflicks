@@ -3,8 +3,8 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env BABEL_ENV=server NODE_ENV=development nodemon --watch src/server --exec babel-node src/server/index.js",
-		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"dev:server": "cross-env BABEL_ENV=server NODE_ENV=development nodemon --watch src/server --exec babel-node src/server/index.js",
+		"dev:browser": "cross-env BABEL_ENV=browser webpack --config webpack.config.dev.js --watch",
 		"test": "jest"
 	},
 	"dependencies": {
@@ -19,6 +19,8 @@
 		"pg": "^7.3.0",
 		"pg-hstore": "^2.3.2",
 		"react": "16.0.0-alpha.12",
+		"react-apollo": "^1.4.15",
+		"react-dom": "16.0.0-alpha.12",
 		"react-native": "0.48.3",
 		"sequelize": "^4.8.4",
 		"validator": "^8.2.0"
@@ -27,10 +29,12 @@
 		"babel-core": "^6.26.0",
 		"babel-eslint": "^8.0.0",
 		"babel-jest": "21.0.2",
+		"babel-loader": "^7.1.2",
 		"babel-plugin-module-resolver": "^2.7.1",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
 		"babel-preset-env": "^1.6.0",
 		"babel-preset-flow": "^6.23.0",
+		"babel-preset-react": "^6.24.1",
 		"babel-preset-react-native": "4.0.0",
 		"cross-env": "^5.0.5",
 		"eslint": "^4.6.1",
@@ -40,11 +44,14 @@
 		"eslint-plugin-promise": "^3.5.0",
 		"eslint-plugin-standard": "^3.0.1",
 		"flow-bin": "^0.54.1",
+		"html-webpack-plugin": "^2.30.1",
 		"jest": "21.1.0",
 		"morgan": "^1.8.2",
 		"nodemon": "^1.12.1",
 		"react-test-renderer": "16.0.0-alpha.12",
-		"rimraf": "^2.6.2"
+		"rimraf": "^2.6.2",
+		"webpack": "^3.6.0",
+		"webpack-livereload-plugin": "^0.11.0"
 	},
 	"jest": {
 		"preset": "react-native"

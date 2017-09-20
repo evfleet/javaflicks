@@ -1,3 +1,7 @@
+import authTypes from './auth';
+
+const types = [ authTypes ].join('\n');
+
 export default `
   type User {
     id: Int
@@ -6,20 +10,10 @@ export default `
     verified: Boolean
   }
 
+  ${types}
+
   type Query {
     getUser(email: String, username: String): User
-  }
-
-  type AuthResponse {
-    email: String!,
-    username: String!,
-    verified: Boolean!,
-    accessToken: String!,
-    refreshToken: String!
-  }
-
-  type RegisterResponse {
-    success: Boolean!
   }
 
   type Mutation {

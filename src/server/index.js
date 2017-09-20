@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -8,6 +9,8 @@ import models from 'config/database';
 import constants from 'config/constants';
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, '../../web')));
 
 app.use(bodyParser.json());
 app.use(cookieParser(constants.COOKIE_SECRET, {
@@ -26,6 +29,10 @@ app.use('/graphql', graphqlExpress((req, res) => ({
     models
   }
 })));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../web/index.html'));
+});
 
 models.sequelize.sync().then(() => {
   app.listen(constants.PORT, () => { console.log(`Server running on port: ${constants.PORT}`); });
