@@ -16,7 +16,7 @@ class Root extends Component {
       const { data: { authenticate: result } } = await this.props.mutate({
         variables: {
           email,
-          refreshToken: '1'
+          refreshToken
         }
       });
 

@@ -39894,7 +39894,7 @@ var Root = function (_Component) {
                 return this.props.mutate({
                   variables: {
                     email: email,
-                    refreshToken: '1'
+                    refreshToken: refreshToken
                   }
                 });
 
@@ -41322,6 +41322,10 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _Header = __webpack_require__(310);
+
+var _Header2 = _interopRequireDefault(_Header);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Layout = function (_Component) {
@@ -41341,8 +41345,12 @@ var Layout = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
-        'Layout',
-        _react2.default.cloneElement(this.props.children, { user: user })
+        _react2.default.createElement(_Header2.default, { user: user }),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.cloneElement(this.props.children, {})
+        )
       );
     }
   }]);
@@ -41350,6 +41358,97 @@ var Layout = function (_Component) {
 }(_react.Component);
 
 exports.default = Layout;
+
+/***/ }),
+/* 310 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Header = __webpack_require__(311);
+
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Header).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 311 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _getPrototypeOf = __webpack_require__(271);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(274);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(275);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(279);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(290);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Header = function (_Component) {
+  (0, _inherits3.default)(Header, _Component);
+
+  function Header() {
+    (0, _classCallCheck3.default)(this, Header);
+    return (0, _possibleConstructorReturn3.default)(this, (Header.__proto__ || (0, _getPrototypeOf2.default)(Header)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(Header, [{
+    key: 'render',
+    value: function render() {
+      var user = this.props.user;
+
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        'Header',
+        user && _react2.default.createElement(
+          'p',
+          null,
+          'Username: ',
+          user.username
+        )
+      );
+    }
+  }]);
+  return Header;
+}(_react.Component);
+
+exports.default = Header;
 
 /***/ })
 /******/ ]);
