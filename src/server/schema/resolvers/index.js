@@ -28,11 +28,9 @@ export default {
         const cookieToken = req.signedCookies.refreshToken;
         const user = await models.User.findOne({ where: { email } });
 
-        /*
         if (!cookieToken || !user || refreshToken !== cookieToken) {
           throw new Error('Invalid authentication');
         }
-        */
 
         const decoded = await jwt.verify(refreshToken, `${constants.REFRESH_SECRET}${user.password}`);
 

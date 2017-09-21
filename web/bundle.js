@@ -9850,8 +9850,6 @@ exports.authActions = authActions;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var SET_AUTH = exports.SET_AUTH = 'SET_AUTH';
-
 var LOGIN_PASS = exports.LOGIN_PASS = 'LOGIN_PASS';
 var LOGIN_FAIL = exports.LOGIN_FAIL = 'LOGIN_FAIL';
 var LOGIN_ERROR = exports.LOGIN_ERROR = 'LOGIN_ERROR';
