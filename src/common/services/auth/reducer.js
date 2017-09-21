@@ -9,10 +9,16 @@ export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case actionTypes.SET_AUTH:
+    case actionTypes.LOGIN_PASS:
       return {
         isLoading: false,
         user: payload
+      };
+
+    case actionTypes.LOGIN_FAIL:
+      return {
+        isLoading: false,
+        user: null
       };
 
     default:

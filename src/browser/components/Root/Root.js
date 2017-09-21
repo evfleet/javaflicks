@@ -1,36 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { graphql, gql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
-import { authActions } from 'services/auth';
+import storage from 'config/storage';
 import Layout from 'components/Layout';
+import { authActions } from 'services/auth';
+import { authenticationMutation } from 'mutations';
 
 class Root extends Component {
-  async componentWillMount() {
+  componentWillMount() {
+    this.authenticate();
+  }
+
+  async authenticate() {
     try {
-      const credentials = localStorage.getItem('auth');
-      const { email, refreshToken } = JSON.parse(credentials);
+      const { email, refreshToken } = await storage.getAuth();
 
       const { data: { authenticate: result } } = await this.props.mutate({
-        variables: {
-          email,
-          refreshToken
-        }
+        variables: { email, refreshToken }
       });
 
-      localStorage.setItem('auth', JSON.stringify({
-        email: result.email,
-        refreshToken: result.refreshToken
-      }));
-
-      this.props.actions.setAuth({
-        email: result.email,
-        username: result.username
-      });
+      this.props.actions.loginPass(result);
     } catch (error) {
-      this.props.actions.setAuth(null);
+      this.props.actions.loginFail();
     }
   }
 
@@ -49,17 +43,7 @@ class Root extends Component {
   }
 }
 
-const withAuthentication = graphql(gql`
-  mutation ($email: String!, $refreshToken: String!) {
-    authenticate(email: $email, refreshToken: $refreshToken) {
-      email,
-      username,
-      verified,
-      accessToken,
-      refreshToken
-    }
-  }
-`);
+const withAuthentication = graphql(authenticationMutation);
 
 const RootWithAuthentication = withAuthentication(
   withRouter(Root)

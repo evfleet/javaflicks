@@ -29,7 +29,7 @@ module.exports = {
     ]
   },
   resolve: {
-    modules: ['./src/browser', 'node_modules']
+    modules: ['./src/browser', './src/common', 'node_modules']
   },
   plugins: [
     new HtmlWebpackPlugin({
