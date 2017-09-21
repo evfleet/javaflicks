@@ -11,3 +11,23 @@ export const authenticationMutation = gql`
     }
   }
 `;
+
+export const loginMutation = gql`
+  mutation ($identifier: String!, $password: String!) {
+    login(identifier: $identifier, password: $password) {
+      email,
+      username,
+      verified,
+      accessToken,
+      refreshToken
+    }
+  }
+`;
+
+export const registerMutation = gql`
+  mutation ($email: String!, $username: String!, $password: String!) {
+    register(email: $email, username: $username, password: $password) {
+      success
+    }
+  }
+`;

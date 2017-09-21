@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { graphql } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
@@ -9,7 +9,14 @@ import Layout from 'components/Layout';
 import { authActions } from 'services/auth';
 import { authenticationMutation } from 'mutations';
 
-class Root extends Component {
+@withRouter
+@graphql(authenticationMutation)
+@connect(
+  ({ auth }) => ({ auth }),
+  (dispatch) => ({ actions: bindActionCreators(authActions, dispatch) })
+)
+
+export default class Root extends Component {
   componentWillMount() {
     this.authenticate();
   }
@@ -42,14 +49,3 @@ class Root extends Component {
     );
   }
 }
-
-const withAuthentication = graphql(authenticationMutation);
-
-const RootWithAuthentication = withAuthentication(
-  withRouter(Root)
-);
-
-export default connect(
-  ({ auth }) => ({ auth }),
-  (dispatch) => ({ actions: bindActionCreators(authActions, dispatch) })
-)(RootWithAuthentication);

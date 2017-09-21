@@ -18,7 +18,11 @@
     },
     "browser": {
       "presets": ["react", "env", "flow"],
-      "plugins": ["transform-object-rest-spread", "transform-runtime"]
+      "plugins": [
+        "transform-object-rest-spread",
+        "transform-decorators-legacy",
+        "transform-runtime"
+      ]
     }
   }
 }
