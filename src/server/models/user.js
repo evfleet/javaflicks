@@ -46,7 +46,5 @@ export default (sequelize, DataTypes) => {
     return bcrypt.compare(password, this.password);
   };
 
-
-
   return User;
 };

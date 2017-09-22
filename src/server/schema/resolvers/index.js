@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
 import constants from 'config/constants';
@@ -6,7 +7,7 @@ import emailService from 'services/email';
 
 export default {
   Query: {
-    getUser: async (parent, { email, username }, { req, models }) => {
+    async getUser(parent, { email, username }, { req, models }) {
       if (email || username) {
         return models.User.findOne({
           where: {
@@ -23,7 +24,7 @@ export default {
   },
 
   Mutation: {
-    authenticate: async (parent, { email, refreshToken }, { req, res, models }) => {
+    async authenticate(parent, { email, refreshToken }, { req, res, models }) {
       try {
         const cookieToken = req.signedCookies.refreshToken;
         const user = await models.User.findOne({ where: { email } });
@@ -52,14 +53,13 @@ export default {
       }
     },
 
-    login: async (parent, { identifier, password }, { req, res, models }) => {
+    async login(parent, { identifier, password }, { req, res, models }) {
       try {
         const user = await models.User.findOne({
           where: {
             $or: [{ email: identifier }, { username: identifier }]
           }
         });
-
         const validPassword = await (user ? user.comparePassword(password) : false);
 
         if (!validPassword) {
@@ -83,10 +83,12 @@ export default {
       }
     },
 
-    register: async (parent, { email, username, password }, { models }) => {
+    async register(parent, { email, username, password }, { models }) {
       try {
         const { verificationToken } = await models.User.create({ username, email, password });
+
         await emailService.sendVerification(email, verificationToken);
+
         return { success: true };
       } catch (error) {
         if (error.name === 'SequelizeUniqueConstraintError') {
@@ -99,6 +101,80 @@ export default {
           }
         } else {
           throw new Error('Unexpected server error');
+        }
+      }
+    },
+
+    async verification(parent, { email, verificationToken }, { models }) {
+      try {
+        const user = await models.User.findOne({ where: { email } });
+
+        if (!user || verificationToken !== user.verificationToken) {
+          throw new Error('Invalid verification');
+        } else {
+          await models.User.update({
+            verified: true,
+            verificationToken: null
+          }, { where: { email } });
+
+          return { success: true };
+        }
+      } catch (error) {
+        switch (error.message) {
+          case 'Invalid verification':
+            throw new Error(error.message);
+          default:
+            throw new Error('Unexpected server error');
+        }
+      }
+    },
+
+    async requestResetPassword(parent, { email }, { models }) {
+      try {
+        const user = await models.User.findOne({ where: { email } });
+
+        if (!user) {
+          return { success: true };
+        } else {
+          const currentTime = new Date();
+          const resetToken = crypto.randomBytes(32).toString('hex');
+          const resetExpires = currentTime.setMinutes(currentTime.getMinutes() + 30);
+
+          await models.User.update({ resetExpires, resetToken }, { where: { email } });
+
+          return { success: true };
+        }
+      } catch (error) {
+        throw new Error('Unexpected server error');
+      }
+    },
+
+    async resetPassword(parent, { email, resetToken, password }, { models }) {
+      try {
+        const user = await models.User.findOne({ where: { email } });
+
+        if (!user || resetToken !== user.resetToken) {
+          throw new Error('Invalid reset token');
+        }
+
+        if (new Date().getTime() > user.resetExpires) {
+          throw new Error('Password reset expired');
+        }
+
+        await models.User.update({
+          password,
+          resetExpires: null,
+          resetToken: null
+        }, { where: { email }, individualHooks: true });
+
+        return { success: false };
+      } catch (error) {
+        switch (error.message) {
+          case 'Invalid reset token':
+          case 'Password reset expired':
+            throw new Error(error.message);
+          default:
+            throw new Error('Unexpected server error');
         }
       }
     }

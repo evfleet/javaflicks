@@ -37404,6 +37404,10 @@ var _asyncToGenerator2 = __webpack_require__(211);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+var _promise = __webpack_require__(104);
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _storage = __webpack_require__(246);
 
 var _storage2 = _interopRequireDefault(_storage);
@@ -37421,75 +37425,82 @@ var loginPass = exports.loginPass = function loginPass(_ref) {
       username = _ref.username,
       refreshToken = _ref.refreshToken;
 
-  return function () {
-    var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(dispatch) {
-      return _regenerator2.default.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              _context.next = 3;
-              return _storage2.default.setAuth({ email: email, refreshToken: refreshToken });
+  return function (dispatch) {
+    return new _promise2.default(function () {
+      var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(resolve, reject) {
+        return _regenerator2.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return _storage2.default.setAuth({ email: email, refreshToken: refreshToken });
 
-            case 3:
-              dispatch({
-                type: actionTypes.LOGIN_PASS,
-                payload: {
-                  email: email,
-                  username: username
-                }
-              });
-              _context.next = 11;
-              break;
+              case 3:
+                dispatch({
+                  type: actionTypes.LOGIN_PASS,
+                  payload: {
+                    email: email,
+                    username: username
+                  }
+                });
+                resolve();
+                _context.next = 13;
+                break;
 
-            case 6:
-              _context.prev = 6;
-              _context.t0 = _context['catch'](0);
-              _context.next = 10;
-              return _storage2.default.clearAuth();
+              case 7:
+                _context.prev = 7;
+                _context.t0 = _context['catch'](0);
+                _context.next = 11;
+                return _storage2.default.clearAuth();
 
-            case 10:
-              dispatch({ type: actionTypes.LOGIN_ERROR });
+              case 11:
+                dispatch({ type: actionTypes.LOGIN_ERROR });
+                reject(_context.t0);
 
-            case 11:
-            case 'end':
-              return _context.stop();
+              case 13:
+              case 'end':
+                return _context.stop();
+            }
           }
-        }
-      }, _callee, undefined, [[0, 6]]);
-    }));
+        }, _callee, undefined, [[0, 7]]);
+      }));
 
-    return function (_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+      return function (_x, _x2) {
+        return _ref2.apply(this, arguments);
+      };
+    }());
+  };
 };
 
 var loginFail = exports.loginFail = function loginFail() {
-  return function () {
-    var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(dispatch) {
-      return _regenerator2.default.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return _storage2.default.clearAuth();
+  return function (dispatch) {
+    return new _promise2.default(function () {
+      var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(resolve) {
+        return _regenerator2.default.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return _storage2.default.clearAuth();
 
-            case 2:
-              dispatch({ type: actionTypes.LOGIN_FAIL });
+              case 2:
+                dispatch({ type: actionTypes.LOGIN_FAIL });
+                resolve();
 
-            case 3:
-            case 'end':
-              return _context2.stop();
+              case 4:
+              case 'end':
+                return _context2.stop();
+            }
           }
-        }
-      }, _callee2, undefined);
-    }));
+        }, _callee2, undefined);
+      }));
 
-    return function (_x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+      return function (_x3) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+  };
 };
 
 var logout = exports.logout = function logout() {};
@@ -41399,6 +41410,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _getPrototypeOf = __webpack_require__(251);
 
@@ -41423,10 +41435,6 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
-
-var _Header = __webpack_require__(304);
-
-var _Header2 = _interopRequireDefault(_Header);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41447,7 +41455,6 @@ var Layout = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_Header2.default, { user: user }),
         _react2.default.createElement(
           'div',
           null,
@@ -41462,97 +41469,8 @@ var Layout = function (_Component) {
 exports.default = Layout;
 
 /***/ }),
-/* 304 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Header = __webpack_require__(305);
-
-Object.defineProperty(exports, 'default', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_Header).default;
-  }
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ }),
-/* 305 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _getPrototypeOf = __webpack_require__(251);
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(252);
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(253);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(254);
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(258);
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Header = function (_Component) {
-  (0, _inherits3.default)(Header, _Component);
-
-  function Header() {
-    (0, _classCallCheck3.default)(this, Header);
-    return (0, _possibleConstructorReturn3.default)(this, (Header.__proto__ || (0, _getPrototypeOf2.default)(Header)).apply(this, arguments));
-  }
-
-  (0, _createClass3.default)(Header, [{
-    key: 'render',
-    value: function render() {
-      var user = this.props.user;
-
-
-      return _react2.default.createElement(
-        'div',
-        null,
-        'Header',
-        user && _react2.default.createElement(
-          'p',
-          null,
-          'Username: ',
-          user.username
-        )
-      );
-    }
-  }]);
-  return Header;
-}(_react.Component);
-
-exports.default = Header;
-
-/***/ }),
+/* 304 */,
+/* 305 */,
 /* 306 */
 /***/ (function(module, exports, __webpack_require__) {
 

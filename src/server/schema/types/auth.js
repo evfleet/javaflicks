@@ -7,7 +7,7 @@ export default `
     refreshToken: String!
   }
 
-  type RegisterResponse {
+  type SuccessResponse {
     success: Boolean!
   }
 `;

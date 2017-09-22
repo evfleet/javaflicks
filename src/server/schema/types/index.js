@@ -19,6 +19,9 @@ export default `
   type Mutation {
     authenticate(email: String!, refreshToken: String!): AuthResponse!
     login(identifier: String!, password: String!): AuthResponse!
-    register(email: String!, username: String!, password: String!): RegisterResponse!
+    register(email: String!, username: String!, password: String!): SuccessResponse!
+    verification(email: String!, verificationToken: String!): SuccessResponse
+    requestResetPassword(email: String!): SuccessResponse
+    resetPassword(email: String!, resetToken: String!, password: String!): SuccessResponse
   }
 `;

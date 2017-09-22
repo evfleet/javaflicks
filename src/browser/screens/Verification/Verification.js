@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-export default class Auth extends Component {
+export class Verification extends Component {
   render() {
     return (
       <div>
-        Auth
+        Verification
       </div>
     );
   }
