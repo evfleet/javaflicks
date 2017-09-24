@@ -7,13 +7,9 @@ import emailService from 'services/email';
 
 export default {
   Query: {
-    async getUser(parent, { email, username }, { req, models }) {
-      if (email || username) {
-        return models.User.findOne({
-          where: {
-            $or: [{ email }, { username }]
-          }
-        });
+    async getUser(parent, { email }, { req, models }) {
+      if (email) {
+        return models.User.findOne({ where: { email } });
       }
 
       // if neither, find current logged in user
@@ -53,13 +49,9 @@ export default {
       }
     },
 
-    async login(parent, { identifier, password }, { req, res, models }) {
+    async login(parent, { email, password }, { req, res, models }) {
       try {
-        const user = await models.User.findOne({
-          where: {
-            $or: [{ email: identifier }, { username: identifier }]
-          }
-        });
+        const user = await models.User.findOne({ where: { email } });
         const validPassword = await (user ? user.comparePassword(password) : false);
 
         if (!validPassword) {
@@ -83,21 +75,18 @@ export default {
       }
     },
 
-    async register(parent, { email, username, password }, { models }) {
+    async register(parent, { email, password }, { models }) {
       try {
-        const { verificationToken } = await models.User.create({ username, email, password });
+        const { verificationToken } = await models.User.create({ email, password });
 
         await emailService.sendVerification(email, verificationToken);
 
         return { success: true };
       } catch (error) {
         if (error.name === 'SequelizeUniqueConstraintError') {
-          switch (error.errors[0].path) {
-            case 'email':
-              await emailService.sendNotification(email);
-              return { success: true };
-            case 'username':
-              throw new Error('Username already taken');
+          if (error.errors[0].path === 'email') {
+            await emailService.sendNotification(email);
+            return { success: true };
           }
         } else {
           throw new Error('Unexpected server error');
