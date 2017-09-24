@@ -5,8 +5,15 @@ import constants from './constants';
 const sequelize = new Sequelize(constants.DATABASE_URL);
 
 const db = {
-  User: sequelize.import('../models/user')
+  User: sequelize.import('../models/user'),
+  Movie: sequelize.import('../models/movie')
 };
+
+Object.keys(db).forEach((modelName) => {
+  if ('associate' in db[modelName]) {
+    db[modelName].associate(db);
+  }
+});
 
 db.sequelize = sequelize;
 
