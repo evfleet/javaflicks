@@ -4,7 +4,6 @@ export const authenticationMutation = gql`
   mutation ($email: String!, $refreshToken: String!) {
     authenticate(email: $email, refreshToken: $refreshToken) {
       email,
-      username,
       verified,
       accessToken,
       refreshToken
@@ -13,10 +12,9 @@ export const authenticationMutation = gql`
 `;
 
 export const loginMutation = gql`
-  mutation ($identifier: String!, $password: String!) {
-    login(identifier: $identifier, password: $password) {
+  mutation ($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       email,
-      username,
       verified,
       accessToken,
       refreshToken
@@ -25,8 +23,8 @@ export const loginMutation = gql`
 `;
 
 export const registerMutation = gql`
-  mutation ($email: String!, $username: String!, $password: String!) {
-    register(email: $email, username: $username, password: $password) {
+  mutation ($email: String!, $password: String!) {
+    register(email: $email, password: $password) {
       success
     }
   }
