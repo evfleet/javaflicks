@@ -10,7 +10,7 @@ import constants from 'config/constants';
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../../web')));
+app.use(express.static(path.resolve(__dirname, '../../dist/client')));
 
 app.use(bodyParser.json());
 app.use(cookieParser(constants.COOKIE_SECRET, {
@@ -31,7 +31,7 @@ app.use('/graphql', graphqlExpress((req, res) => ({
 })));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../web/index.html'));
+  res.sendFile(path.resolve(__dirname, '../../dist/client/index.html'));
 });
 
 models.sequelize.sync().then(() => {

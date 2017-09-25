@@ -5,7 +5,9 @@ import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo';
+import thunk from 'redux-thunk';
 
+import { authReducer } from 'services/auth';
 import Root from 'components/Root';
 
 const networkInterface = createNetworkInterface({
@@ -21,11 +23,12 @@ const client = new ApolloClient({
 
 const store = createStore(
   combineReducers({
+    auth: authReducer,
     apollo: client.reducer()
   }),
   {},
   compose(
-    applyMiddleware(client.middleware()),
+    applyMiddleware(thunk, client.middleware()),
     (typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined') ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
   )
 );

@@ -1,11 +1,11 @@
 {
-	"name": "boilerplate",
+	"name": "javaflicks",
+	"author": "Evan Fleet",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
 		"dev:server": "cross-env BABEL_ENV=server NODE_ENV=development nodemon --watch src/server --exec babel-node src/server/index.js",
-		"dev:browser": "cross-env BABEL_ENV=browser webpack --config webpack.config.dev.js --watch",
-		"test": "jest"
+		"dev:browser": "cross-env BABEL_ENV=browser webpack --config webpack.config.dev.js --watch"
 	},
 	"dependencies": {
 		"bcrypt": "^1.0.3",
@@ -17,6 +17,7 @@
 		"jsonwebtoken": "^8.0.1",
 		"pg": "^7.3.0",
 		"pg-hstore": "^2.3.2",
+		"prop-types": "^15.5.10",
 		"react": "16.0.0-alpha.12",
 		"react-apollo": "^1.4.15",
 		"react-dom": "16.0.0-alpha.12",
@@ -48,6 +49,7 @@
 		"eslint-plugin-node": "^5.1.1",
 		"eslint-plugin-promise": "^3.5.0",
 		"eslint-plugin-standard": "^3.0.1",
+		"file-loader": "^0.11.2",
 		"flow-bin": "^0.54.1",
 		"html-webpack-plugin": "^2.30.1",
 		"jest": "21.1.0",

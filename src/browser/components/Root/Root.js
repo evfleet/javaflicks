@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
+import { bindActionCreators, compose } from 'redux';
+import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 
 import storage from 'config/storage';
@@ -7,74 +9,45 @@ import Layout from 'components/Layout';
 import Auth from 'screens/Auth';
 import Landing from 'screens/Landing';
 import Verification from 'screens/Verification';
+import { authActions } from 'services/auth';
 import { authenticationMutation } from 'mutations';
 
 @withRouter
 @graphql(authenticationMutation)
+@connect(
+  ({ auth }) => ({ auth }),
+  (dispatch) => ({ actions: bindActionCreators(authActions, dispatch) })
+)
 
 export default class Root extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      isLoading: true,
-      auth: {
-        email: null,
-        loggedIn: false
-      },
-      errors: []
-    };
-  }
-
   componentWillMount() {
     this.authenticate();
   }
 
   async authenticate() {
+    const { actions, history, mutate } = this.props;
+
     try {
       const { email, refreshToken } = await storage.getAuth();
-      const { data: { authenticate: result } } = await this.props.mutate({
+      const { data: { authenticate: result } } = await mutate({
         variables: { email, refreshToken }
       });
 
       if (!result.verified) {
-        this.setState({
-          isLoading: false,
-          auth: {
-            email: result.email,
-            loggedIn: false
-          },
-          errors: []
-        }, () => this.props.history.replace('/verification'));
+        await actions.verificationFail(result);
+        history.replace('/verification');
       } else {
-        this.setState({
-          isLoading: false,
-          auth: {
-            email: result.email,
-            loggedIn: true
-          },
-          errors: []
-        }, async () => {
-          await storage.setAuth(result);
-          this.props.history.replace('/');
-        });
+        await actions.authenticationPass(result);
+        history.replace('/');
       }
     } catch (error) {
-      this.setState({
-        isLoading: false,
-        auth: {
-          email: null,
-          loggedIn: false
-        },
-        errors: []
-      }, async () => {
-        this.props.history.replace('/login');
-      });
+      await actions.authenticationFail();
+      history.replace('/login');
     }
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading } = this.props.auth;
 
     return (
       <Layout>
