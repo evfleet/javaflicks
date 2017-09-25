@@ -1,21 +1,20 @@
-import authTypes from './auth';
+import { authTypes } from './auth';
+import { movieTypes } from './movie';
 
-const types = [ authTypes ].join('\n');
+const types = [ authTypes, movieTypes ].join('\n');
+const queries = [].join('\n');
+const mutations = [].join('\n');
 
 export default `
-  type User {
-    id: Int
-    email: String
-    verified: Boolean
-  }
-
   ${types}
 
   type Query {
+    ${queries}
     getUser(email: String): User
   }
 
   type Mutation {
+    ${mutations}
     authenticate(email: String!, refreshToken: String!): AuthResponse!
     login(email: String!, password: String!): AuthResponse!
     register(email: String!, password: String!): SuccessResponse!
