@@ -40,3 +40,28 @@ export const verificationFail = ({ email }) => {
     });
   };
 };
+
+export const loginPass = ({ email, refreshToken }) => {
+  return async (dispatch) => {
+    return new Promise(async (resolve) => {
+      await storage.setAuth({ email, refreshToken });
+      dispatch({
+        type: actionTypes.LOGIN_PASS,
+        payload: {
+          email
+        }
+      });
+      resolve();
+    });
+  };
+};
+
+export const loginFail = () => {
+  return async (dispatch) => {
+    return new Promise(async (resolve) => {
+      await storage.clearAuth();
+      dispatch({ type: actionTypes.LOGIN_FAIL });
+      resolve();
+    });
+  };
+};

@@ -16,7 +16,11 @@ import { authenticationMutation } from 'mutations';
 @graphql(authenticationMutation)
 @connect(
   ({ auth }) => ({ auth }),
-  (dispatch) => ({ actions: bindActionCreators(authActions, dispatch) })
+  (dispatch) => ({ actions: bindActionCreators({
+    verificationFail: authActions.verificationFail,
+    authenticationPass: authActions.authenticationPass,
+    authenticationFail: authActions.authenticationFail
+  }, dispatch) })
 )
 
 export default class Root extends Component {
@@ -47,7 +51,7 @@ export default class Root extends Component {
   }
 
   render() {
-    const { isLoading } = this.props.auth;
+    const { auth: { isLoading } } = this.props;
 
     return (
       <Layout>
