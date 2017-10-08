@@ -40516,7 +40516,7 @@ var Root = (_dec = (0, _reactApollo.graphql)(_mutations.authenticationMutation),
                 return actions.authenticationFail();
 
               case 26:
-                history.replace('/login');
+                history.replace('/auth');
 
               case 27:
               case 'end':
@@ -40554,7 +40554,7 @@ var Root = (_dec = (0, _reactApollo.graphql)(_mutations.authenticationMutation),
             component: _Landing2.default
           }),
           _react2.default.createElement(_reactRouterDom.Route, {
-            path: '/login',
+            path: '/auth',
             component: _Auth2.default
           }),
           _react2.default.createElement(_reactRouterDom.Route, { path: '/verification', render: function render(props) {
@@ -41803,7 +41803,7 @@ var _inherits2 = __webpack_require__(33);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _dec, _dec2, _class;
+var _dec, _dec2, _dec3, _class;
 
 var _react = __webpack_require__(0);
 
@@ -41838,7 +41838,7 @@ var initialFields = {
   }
 };
 
-var Auth = (_dec = (0, _reactApollo.graphql)(_mutations.loginMutation), _dec2 = (0, _reactRedux.connect)(function (_ref) {
+var Auth = (_dec = (0, _reactApollo.graphql)(_mutations.registerMutation, { name: 'registerMutation' }), _dec2 = (0, _reactApollo.graphql)(_mutations.loginMutation, { name: 'loginMutation' }), _dec3 = (0, _reactRedux.connect)(function (_ref) {
   var auth = _ref.auth;
   return { auth: auth };
 }, function (dispatch) {
@@ -41847,7 +41847,7 @@ var Auth = (_dec = (0, _reactApollo.graphql)(_mutations.loginMutation), _dec2 = 
       loginFail: _auth.authActions.loginFail,
       verificationFail: _auth.authActions.verificationFail
     }, dispatch) };
-}), (0, _reactRouterDom.withRouter)(_class = _dec(_class = _dec2(_class = function (_Component) {
+}), (0, _reactRouterDom.withRouter)(_class = _dec(_class = _dec2(_class = _dec3(_class = function (_Component) {
   (0, _inherits3.default)(Auth, _Component);
 
   function Auth() {
@@ -41880,17 +41880,17 @@ var Auth = (_dec = (0, _reactApollo.graphql)(_mutations.loginMutation), _dec2 = 
     key: 'login',
     value: function () {
       var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-        var _props, actions, history, mutate, _state$fields, email, password, _ref4, result;
+        var _props, actions, history, loginMutation, registerMutation, _state$fields, email, password, _ref4, result;
 
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _props = this.props, actions = _props.actions, history = _props.history, mutate = _props.mutate;
+                _props = this.props, actions = _props.actions, history = _props.history, loginMutation = _props.loginMutation, registerMutation = _props.registerMutation;
                 _state$fields = this.state.fields, email = _state$fields.email, password = _state$fields.password;
                 _context.prev = 2;
                 _context.next = 5;
-                return mutate({
+                return loginMutation({
                   variables: {
                     email: email.value,
                     password: password.value
@@ -41965,6 +41965,8 @@ var Auth = (_dec = (0, _reactApollo.graphql)(_mutations.loginMutation), _dec2 = 
           errors = _state.errors;
 
 
+      console.log(this.props);
+
       return _react2.default.createElement(
         'div',
         null,
@@ -41988,13 +41990,14 @@ var Auth = (_dec = (0, _reactApollo.graphql)(_mutations.loginMutation), _dec2 = 
               error
             );
           }),
-          _react2.default.createElement('input', { type: 'submit' })
-        )
+          _react2.default.createElement('input', { type: 'submit', value: 'Login' })
+        ),
+        _react2.default.createElement('form', null)
       );
     }
   }]);
   return Auth;
-}(_react.Component)) || _class) || _class) || _class);
+}(_react.Component)) || _class) || _class) || _class) || _class);
 exports.default = Auth;
 
 /***/ }),

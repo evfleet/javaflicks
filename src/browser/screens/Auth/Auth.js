@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { bindActionCreators, compose } from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 
 import Input from 'components/Input';
 import { authActions } from 'services/auth';
-import { loginMutation } from 'mutations';
+import { loginMutation, registerMutation } from 'mutations';
 
 const initialFields = {
   email: {
@@ -20,7 +20,8 @@ const initialFields = {
 };
 
 @withRouter
-@graphql(loginMutation)
+@graphql(registerMutation, { name: 'registerMutation' })
+@graphql(loginMutation, { name: 'loginMutation' })
 @connect(
   ({ auth }) => ({ auth }),
   (dispatch) => ({ actions: bindActionCreators({
@@ -37,11 +38,11 @@ export default class Auth extends Component {
   }
 
   async login() {
-    const { actions, history, mutate } = this.props;
+    const { actions, history, loginMutation, registerMutation } = this.props;
     const { fields: { email, password } } = this.state;
 
     try {
-      const { data: { login: result } } = await mutate({
+      const { data: { login: result } } = await loginMutation({
         variables: {
           email: email.value,
           password: password.value
@@ -93,6 +94,8 @@ export default class Auth extends Component {
   render() {
     const { fields, errors } = this.state;
 
+    console.log(this.props);
+
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -111,7 +114,11 @@ export default class Auth extends Component {
             <p key={`error-${index}`}>{error}</p>
           ))}
 
-          <input type="submit" />
+          <input type="submit" value="Login" />
+        </form>
+
+        <form>
+
         </form>
       </div>
     );

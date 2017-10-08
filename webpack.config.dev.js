@@ -1,17 +1,14 @@
 /* eslint-disable no-unused-vars */
-
 let path = require('path');
 let webpack = require('webpack');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let LiveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = {
   context: __dirname,
-  entry: {
-    app: [
-      './src/browser/index.js'
-    ]
-  },
+  entry: [
+    'react-hot-loader/patch',
+    'webpack-hot-middleware/client',
+    './src/browser/index.js'
+  ],
   output: {
     path: path.resolve(__dirname, './dist/client'),
     publicPath: '/',
@@ -23,7 +20,16 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: 'babel-loader',
+          options: {
+            presets: ['react', 'env', 'flow'],
+            plugins: [
+              'transform-object-rest-spread',
+              'transform-decorators-legacy',
+              'transform-class-properties',
+              'transform-runtime'
+            ]
+          }
         }
       }
     ]
@@ -31,11 +37,15 @@ module.exports = {
   resolve: {
     modules: ['./src/browser', './src/common', 'node_modules']
   },
+  devServer: {
+    host: 'localhost',
+    port: 3000,
+    historyApiFallback: true,
+    hot: true
+  },
   plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Authentication',
-      template: './src/browser/assets/templates/dev.ejs'
-    }),
-    new LiveReloadPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
   ]
 };

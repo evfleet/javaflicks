@@ -46,7 +46,7 @@ export default class Root extends Component {
       }
     } catch (error) {
       await actions.authenticationFail();
-      history.replace('/login');
+      history.replace('/auth');
     }
   }
 
@@ -66,7 +66,7 @@ export default class Root extends Component {
             />
 
             <Route
-              path="/login"
+              path="/auth"
               component={ Auth }
             />
 

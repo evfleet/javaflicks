@@ -4,8 +4,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev:server": "cross-env BABEL_ENV=server NODE_ENV=development nodemon --watch src/server --exec babel-node src/server/index.js",
-		"dev:browser": "cross-env BABEL_ENV=browser webpack --config webpack.config.dev.js --watch"
+    "start:dev": "cross-env BABEL_ENV=server NODE_ENV=development babel-node src/server/index.js"
 	},
 	"dependencies": {
 		"bcrypt": "^1.0.3",
@@ -32,6 +31,7 @@
 		"validator": "^8.2.0"
 	},
 	"devDependencies": {
+		"babel-cli": "^6.26.0",
 		"babel-core": "^6.26.0",
 		"babel-eslint": "^8.0.0",
 		"babel-jest": "21.0.2",
@@ -54,14 +54,15 @@
 		"eslint-plugin-standard": "^3.0.1",
 		"file-loader": "^0.11.2",
 		"flow-bin": "^0.54.1",
-		"html-webpack-plugin": "^2.30.1",
 		"jest": "21.1.0",
 		"morgan": "^1.8.2",
-		"nodemon": "^1.12.1",
+		"react-hot-loader": "3.0.0-beta.7",
 		"react-test-renderer": "16.0.0-alpha.12",
 		"rimraf": "^2.6.2",
 		"webpack": "^3.6.0",
-		"webpack-livereload-plugin": "^0.11.0"
+		"webpack-dev-middleware": "^1.12.0",
+		"webpack-dev-server": "^2.9.1",
+		"webpack-hot-middleware": "^2.19.1"
 	},
 	"jest": {
 		"preset": "react-native"

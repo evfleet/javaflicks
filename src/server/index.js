@@ -1,5 +1,6 @@
 import path from 'path';
 import express from 'express';
+import webpack from 'webpack';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
@@ -11,15 +12,34 @@ import constants from 'config/constants';
 const app = express();
 
 app.use(express.static(path.resolve(__dirname, '../../dist/client')));
-
 app.use(bodyParser.json());
 app.use(cookieParser(constants.COOKIE_SECRET, {
   httpOnly: true
 }));
 
-app.use('/graphiql', graphiqlExpress({
-  endpointURL: '/graphql'
-}));
+if (process.env.NODE_ENV === 'development') {
+  const webpackConfig = require('../../webpack.config.dev.js');
+  const compiler = webpack(webpackConfig);
+
+  compiler.plugin('done', () => {
+    Object.keys(require.cache).forEach((id) => {
+      if (/[\/\\]client[\/\\]/.test(id)) delete require.cache[id];
+    });
+  });
+
+  app.use(
+    require('webpack-dev-middleware')(compiler, {
+      noInfo: true,
+      publicPath: webpackConfig.output.publicPath
+    })
+  );
+
+  app.use(require('webpack-hot-middleware')(compiler));
+
+  app.use('/graphiql', graphiqlExpress({
+    endpointURL: '/graphql'
+  }));
+}
 
 app.use('/graphql', graphqlExpress((req, res) => ({
   schema,
