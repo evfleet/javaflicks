@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import constants from 'config/constants';
+import constants from '../config/constants';
 
 export default {
   async createTokens({ email, password }) {

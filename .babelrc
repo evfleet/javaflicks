@@ -3,17 +3,7 @@
     "server": {
       "presets": ["env", "flow"],
       "plugins": [
-        "transform-object-rest-spread",
-        ["module-resolver", {
-          "root": ["./src/server"],
-          "alias": {
-            "config": "./config",
-            "helpers": "./helpers",
-            "models": "./models",
-            "schema": "./schema",
-            "services": "./services"
-          }
-        }]
+        "transform-object-rest-spread"
       ]
     }
   }

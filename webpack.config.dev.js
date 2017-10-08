@@ -3,14 +3,15 @@ let path = require('path');
 let webpack = require('webpack');
 
 module.exports = {
-  context: __dirname,
-  entry: [
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client',
-    './src/browser/index.js'
-  ],
+  entry: {
+    app: [
+      'react-hot-loader/patch',
+      'webpack-hot-middleware/client',
+      './src/browser/index.js'
+    ]
+  },
   output: {
-    path: path.resolve(__dirname, './dist/client'),
+    path: path.resolve(__dirname, './dist'),
     publicPath: '/',
     filename: 'bundle.js'
   },
@@ -35,6 +36,7 @@ module.exports = {
     ]
   },
   resolve: {
+    extensions: ['.js'],
     modules: ['./src/browser', './src/common', 'node_modules']
   },
   devServer: {

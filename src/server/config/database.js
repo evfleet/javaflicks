@@ -5,8 +5,7 @@ import constants from './constants';
 const sequelize = new Sequelize(constants.DATABASE_URL);
 
 const db = {
-  User: sequelize.import('../models/user'),
-  Movie: sequelize.import('../models/movie')
+  User: sequelize.import('../models/user')
 };
 
 Object.keys(db).forEach((modelName) => {

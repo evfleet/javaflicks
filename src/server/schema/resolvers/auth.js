@@ -1,9 +1,9 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
-import constants from 'config/constants';
-import authService from 'services/auth';
-import emailService from 'services/email';
+import constants from '../../config/constants';
+import authService from '../../services/auth';
+import emailService from '../../services/email';
 
 export const authQueries = {
   async getUser(parent, { email }, { req, models }) {
