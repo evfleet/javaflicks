@@ -15,7 +15,7 @@ import { authenticationMutation } from 'mutations';
 @withRouter
 @graphql(authenticationMutation)
 @connect(
-  ({ auth }) => ({ auth }),
+  ({ auth, rehydrated }) => ({ auth, rehydrated }),
   (dispatch) => ({ actions: bindActionCreators({
     verificationFail: authActions.verificationFail,
     authenticationPass: authActions.authenticationPass,
@@ -25,7 +25,7 @@ import { authenticationMutation } from 'mutations';
 
 export default class Root extends Component {
   componentWillMount() {
-    this.authenticate();
+    // this.authenticate();
   }
 
   async authenticate() {
