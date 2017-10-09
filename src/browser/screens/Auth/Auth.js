@@ -94,8 +94,6 @@ export default class Auth extends Component {
   render() {
     const { fields, errors } = this.state;
 
-    console.log(this.props);
-
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -115,10 +113,6 @@ export default class Auth extends Component {
           ))}
 
           <input type="submit" value="Login" />
-        </form>
-
-        <form>
-
         </form>
       </div>
     );

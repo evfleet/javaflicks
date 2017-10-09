@@ -29,8 +29,10 @@ if (process.env.NODE_ENV === 'development') {
 
   app.use(
     require('webpack-dev-middleware')(compiler, {
-      noInfo: true,
-      publicPath: webpackConfig.output.publicPath
+      publicPath: webpackConfig.output.publicPath,
+      stats: {
+        colors: true
+      }
     })
   );
 
