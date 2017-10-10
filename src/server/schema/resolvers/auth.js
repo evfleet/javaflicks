@@ -50,9 +50,9 @@ export const authMutations = {
     }
   },
 
-  async login(parent, { email, password }, { req, res, models }) {
+  async login(parent, { identifier, password }, { req, res, models }) {
     try {
-      const user = await models.User.findOne({ where: { email } });
+      const user = await models.User.findOne({ where: { $or: [{ email: identifier }, { username: identifier }] } });
       const validPassword = await (user ? user.comparePassword(password) : false);
 
       if (!validPassword) {
@@ -76,18 +76,23 @@ export const authMutations = {
     }
   },
 
-  async register(parent, { email, password }, { models }) {
+  async register(parent, { email, username, password }, { models }) {
     try {
-      const { verificationToken } = await models.User.create({ email, password });
+      const { verificationToken } = await models.User.create({ email, username, password });
 
       await emailService.sendVerification(email, verificationToken);
 
       return { success: true };
     } catch (error) {
+      console.log(error);
+
       if (error.name === 'SequelizeUniqueConstraintError') {
-        if (error.errors[0].path === 'email') {
-          await emailService.sendNotification(email);
-          return { success: true };
+        switch (error.errors[0].path) {
+          case 'email':
+            await emailService.sendNotification(email);
+            return { success: true };
+          case 'username':
+            throw new Error('Username already taken');
         }
       } else {
         throw new Error('Unexpected server error');

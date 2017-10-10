@@ -14,6 +14,10 @@ export default (sequelize, DataTypes) => {
         isEmail: true
       }
     },
+    username: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     password: {
       type: DataTypes.STRING
     },
@@ -39,7 +43,21 @@ export default (sequelize, DataTypes) => {
   });
 
   User.associate = (models) => {
+    User.hasOne(models.List, {
+      foreignKey: 'userId'
+    });
 
+    User.hasMany(models.Recipe, {
+      foreignKey: 'userId'
+    });
+
+    User.hasMany(models.Review, {
+      foreignKey: 'userId'
+    });
+
+    User.belongsToMany(models.Recipe, {
+      through: 'UserRecipe'
+    });
   };
 
   User.prototype.comparePassword = async function(password) {

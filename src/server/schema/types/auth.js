@@ -3,6 +3,7 @@ export const authTypes = `
   type User {
     id: Int
     email: String
+    username: String
     verified: Boolean
   }
 
@@ -21,7 +22,7 @@ export const authTypes = `
 export const authMutations = `
   authenticate(email: String!, refreshToken: String!): AuthResponse!
   login(email: String!, password: String!): AuthResponse!
-  register(email: String!, password: String!): SuccessResponse!
+  register(email: String!, username: String!, password: String!): SuccessResponse!
   verification(email: String!, verificationToken: String!): SuccessResponse
   requestResetPassword(email: String!): SuccessResponse
   resetPassword(email: String!, resetToken: String!, password: String!): SuccessResponse

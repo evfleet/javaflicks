@@ -14,6 +14,5 @@ export default `
 
   type Mutation {
     ${mutations}
-
   }
 `;

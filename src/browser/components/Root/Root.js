@@ -25,7 +25,7 @@ import { authenticationMutation } from 'mutations';
 
 export default class Root extends Component {
   componentWillMount() {
-    // this.authenticate();
+    this.authenticate();
   }
 
   async authenticate() {
@@ -37,6 +37,7 @@ export default class Root extends Component {
         variables: { email, refreshToken }
       });
 
+      /*
       if (!result.verified) {
         await actions.verificationFail(result);
         history.replace('/verification');
@@ -44,9 +45,14 @@ export default class Root extends Component {
         await actions.authenticationPass(result);
         history.replace('/');
       }
+      */
     } catch (error) {
+      console.log(error);
+
+      /*
       await actions.authenticationFail();
       history.replace('/auth');
+      */
     }
   }
 

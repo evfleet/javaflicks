@@ -56,6 +56,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../dist/index.html'));
 });
 
-models.sequelize.sync().then(() => {
+models.sequelize.sync({ force: true }).then(() => {
   app.listen(constants.PORT, () => { console.log(`Server running on port: ${constants.PORT}`); });
 });
