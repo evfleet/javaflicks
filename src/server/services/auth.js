@@ -3,15 +3,19 @@ import jwt from 'jsonwebtoken';
 import constants from '../config/constants';
 
 export default {
-  async createTokens({ email, password }) {
+  async createTokens({ id, email, username, password }) {
     const signAccessToken = jwt.sign({
-      email
+      id,
+      email,
+      username
     }, constants.ACCESS_SECRET, {
       expiresIn: '5m'
     });
 
     const signRefreshToken = jwt.sign({
-      email
+      id,
+      email,
+      username
     }, `${constants.REFRESH_SECRET}${password}`, {
       expiresIn: '7d'
     });

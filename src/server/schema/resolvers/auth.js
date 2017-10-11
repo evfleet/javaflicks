@@ -59,12 +59,16 @@ export const authMutations = {
         throw new Error('Invalid account/password combination');
       }
 
+      console.log(user);
+
       if (!user.verified) {
         throw new Error('Email has not been verified');
       } else {
         return authService.createAuthResponse(res, user);
       }
     } catch (error) {
+      console.log(error);
+
       switch (error.message) {
         case 'Invalid account/password combination':
           throw new Error(error.message);
@@ -84,8 +88,6 @@ export const authMutations = {
 
       return { success: true };
     } catch (error) {
-      console.log(error);
-
       if (error.name === 'SequelizeUniqueConstraintError') {
         switch (error.errors[0].path) {
           case 'email':

@@ -18,25 +18,27 @@ app.use(cookieParser(constants.COOKIE_SECRET, {
 }));
 
 if (process.env.NODE_ENV === 'development') {
-  const webpackConfig = require('../../webpack.config.dev.js');
-  const compiler = webpack(webpackConfig);
+  if (process.env.CLIENT) {
+    const webpackConfig = require('../../webpack.config.dev.js');
+    const compiler = webpack(webpackConfig);
 
-  compiler.plugin('done', () => {
-    Object.keys(require.cache).forEach((id) => {
-      if (/[\/\\]client[\/\\]/.test(id)) delete require.cache[id];
+    compiler.plugin('done', () => {
+      Object.keys(require.cache).forEach((id) => {
+        if (/[\/\\]client[\/\\]/.test(id)) delete require.cache[id];
+      });
     });
-  });
 
-  app.use(
-    require('webpack-dev-middleware')(compiler, {
-      publicPath: webpackConfig.output.publicPath,
-      stats: {
-        colors: true
-      }
-    })
-  );
+    app.use(
+      require('webpack-dev-middleware')(compiler, {
+        publicPath: webpackConfig.output.publicPath,
+        stats: {
+          colors: true
+        }
+      })
+    );
 
-  app.use(require('webpack-hot-middleware')(compiler));
+    app.use(require('webpack-hot-middleware')(compiler));
+  }
 
   app.use('/graphiql', graphiqlExpress({
     endpointURL: '/graphql'
@@ -56,6 +58,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../dist/index.html'));
 });
 
-models.sequelize.sync({ force: true }).then(() => {
+models.sequelize.sync().then(() => {
   app.listen(constants.PORT, () => { console.log(`Server running on port: ${constants.PORT}`); });
 });

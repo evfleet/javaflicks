@@ -4,10 +4,10 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     directions: {
-      type: DataTypes.JSONB
+      type: DataTypes.ARRAY(DataTypes.STRING)
     },
     ingredients: {
-      type: DataTypes.JSONB
+      type: DataTypes.ARRAY(DataTypes.STRING)
     }
   });
 

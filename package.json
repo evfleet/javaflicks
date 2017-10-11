@@ -4,7 +4,8 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"start:dev": "cross-env BABEL_ENV=server NODE_ENV=development nodemon --watch src/server src/server/index.js --exec babel-node"
+    "start:dev": "cross-env CLIENT=true yarn start:server",
+		"start:server": "cross-env BABEL_ENV=server NODE_ENV=development nodemon --watch src/server src/server/index.js --exec babel-node"
 	},
 	"dependencies": {
 		"apollo-offline": "^0.0.7",

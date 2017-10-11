@@ -56,6 +56,7 @@ export default (sequelize, DataTypes) => {
     });
 
     User.belongsToMany(models.Recipe, {
+      as: 'Favourite',
       through: 'UserRecipe'
     });
   };
