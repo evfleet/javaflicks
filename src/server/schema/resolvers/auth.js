@@ -6,16 +6,7 @@ import authService from '../../services/auth';
 import emailService from '../../services/email';
 
 export const authQueries = {
-  async getUser(parent, { email }, { req, models }) {
-    if (email) {
-      return models.User.findOne({ where: { email } });
-    }
 
-    // if neither, find current logged in user
-
-    // else return null
-    return null;
-  }
 };
 
 export const authMutations = {

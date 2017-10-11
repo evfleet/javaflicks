@@ -5,9 +5,13 @@ export const recipeTypes = `
     directions: [String!]!
     ingredients: [String!]!
     user: User!
-    createdAt: Date!
-    updatedAt: Date!
+    createdAt: String!
+    updatedAt: String!
   }
+`;
+
+export const recipeQueries = `
+  getUserRecipes(id: Int): [Recipe!]!
 `;
 
 export const recipeMutations = `

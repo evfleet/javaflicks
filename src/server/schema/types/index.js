@@ -1,26 +1,15 @@
-import { GraphQLScalarType } from 'graphql';
-import { authTypes, authMutations } from './auth';
-import { recipeTypes, recipeMutations } from './recipe';
-
-const Date = new GraphQLScalarType({
-  name: 'Date',
-  serialize(value) {
-    return value;
-  }
-});
+import { authTypes, authQueries, authMutations } from './auth';
+import { recipeTypes, recipeQueries, recipeMutations } from './recipe';
 
 const types = [ authTypes, recipeTypes ].join('\n');
-const queries = [].join('\n');
+const queries = [ authQueries, recipeQueries ].join('\n');
 const mutations = [ authMutations, recipeMutations ].join('\n');
 
 export default `
-  scalar Date
-
   ${types}
 
   type Query {
     ${queries}
-    getUser(email: String): User
   }
 
   type Mutation {

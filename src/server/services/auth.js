@@ -23,21 +23,15 @@ export default {
     return Promise.all([ signAccessToken, signRefreshToken ]);
   },
 
-  createAuthResponse(res, user) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const [ accessToken, refreshToken ] = await this.createTokens(user);
+  async createAuthResponse(res, user) {
+    const [ accessToken, refreshToken ] = await this.createTokens(user);
 
-        res.cookie('refreshToken', refreshToken, { signed: true });
+    res.cookie('refreshToken', refreshToken, { signed: true });
 
-        resolve({
-          ...JSON.parse(JSON.stringify(user)),
-          accessToken,
-          refreshToken
-        });
-      } catch (error) {
-        reject(error);
-      }
-    });
+    return {
+      ...JSON.parse(JSON.stringify(user)),
+      accessToken,
+      refreshToken
+    };
   }
 };

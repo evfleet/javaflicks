@@ -10,8 +10,11 @@ export const recipeMutations = {
         throw new Error('Invalid authentication');
       }
 
-      // query to see if user already has a recipe with that name
-      // allow duplicate recipe names but not from same user?
+      const recipes = await models.Recipe.findAll({ where: { name } }, { raw: true }).map((r) => r.toJSON());
+
+      if (recipes.find((r) => r.userId === id)) {
+        throw new Error('Recipe name already used by user');
+      }
 
       const recipe = await models.Recipe.create({
         name,
@@ -21,20 +24,17 @@ export const recipeMutations = {
       });
 
       return {
-        name: recipe.name,
-        directions: recipe.directions,
-        ingredients: recipe.ingredients,
+        ...recipe.toJSON(),
         user: {
           id,
           username
         }
       };
     } catch (error) {
-      console.log(error);
-
       switch (error.message) {
+        case 'Recipe name already used by user':
         case 'Invalid authentication':
-          throw new Error('Invalid authentication');
+          throw new Error(error.message);
         default:
           throw new Error('Unexpected server error');
       }
